@@ -12,11 +12,6 @@ var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
 
-
-app.get('/', (req, res) => {
-  res.send('Server connect')
-})
-
 async function getProfile(access_token){
   var profile = await fetch('https://api.spotify.com/v1/me', {
   method: 'GET',
@@ -24,6 +19,15 @@ async function getProfile(access_token){
   })
   var profile_json = await profile.json()
   return profile_json
+}
+
+async function getTopArtists(access_token){
+  var artists = await fetch('https://api.spotify.com/v1/me/top/artists?time_range=long_term', {
+  method: 'GET',
+  headers: { 'Authorization': 'Bearer ' + access_token },
+  })
+  var artists_json = await artists.json()
+  return artists_json
 }
 
 var generateRandomString = function(length) { //part of the Spotify API functionality
@@ -96,7 +100,8 @@ app.get('/callback', async function(req, res) { //this handles the response from
 
 app.get('/profile', async function(req, res) {
   var profile = await getProfile(req.header('Authorization'))
-  console.log(profile)
+  var artists = await getTopArtists(req.header('Authorization'))
+  console.log(artists)
   res.json(profile)
 })
 
