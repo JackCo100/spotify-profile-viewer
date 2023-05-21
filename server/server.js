@@ -1,15 +1,17 @@
 const express = require('express')
 const querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+require('dotenv').config()
 const port = 5000
 
 const app = express()
 app.use(express.json());
 app.use(cookieParser());
 
-var client_id = 'b87cb27f04f24bdab7e2009ed2467580'; // Your client id
-var client_secret = 'aa1a5814afb142688060a492ecb20c99'; // Your secret
+var client_id = process.env.CLIENT_ID; // Your client id
+var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
+
 
 app.get('/', (req, res) => {
   res.send('Server connect')
