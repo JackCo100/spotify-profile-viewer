@@ -71,12 +71,28 @@ function ResultsCard(props) {
 
 
 function App() {
+  var loggedInCookie = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("spotify_token="))
+  ?.split("=")[1]; 
+  const generate = () => { //to be called by the submit button on location modal
+    fetch("/profile", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': loggedInCookie
+      },
+    })
+    .then(response => response.json())
+    .then( json => console.log(json)) //set locationsResponse as the api returned data
+  }
   return (
     <div className="App">
       <MainNav />
       <body>
         <LoginCard />
-        
+        <button id='testBtn' onClick={generate}>Click</button>
       </body>
     </div>
   );

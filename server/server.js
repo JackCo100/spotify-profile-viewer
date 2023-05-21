@@ -1,9 +1,101 @@
 const express = require('express')
-const app = express()
+const querystring = require('querystring');
+var cookieParser = require('cookie-parser');
 const port = 5000
+
+const app = express()
+app.use(express.json());
+app.use(cookieParser());
+
+var client_id = 'b87cb27f04f24bdab7e2009ed2467580'; // Your client id
+var client_secret = 'aa1a5814afb142688060a492ecb20c99'; // Your secret
+var redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
 
 app.get('/', (req, res) => {
   res.send('Server connect')
+})
+
+async function getProfile(access_token){
+  var profile = await fetch('https://api.spotify.com/v1/me', {
+  method: 'GET',
+  headers: { 'Authorization': 'Bearer ' + access_token },
+  })
+  var profile_json = await profile.json()
+  return profile_json
+}
+
+var generateRandomString = function(length) { //part of the Spotify API functionality
+  var text = '';
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (var i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+app.get('/login', function(req, res) { //spotify login
+
+  var state = generateRandomString(16);
+  res.cookie("spotify_state", state);
+
+  // your application requests authorization
+  var scope = 'user-read-private user-read-email user-top-read';
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+      state: state
+    }));
+});
+
+app.get('/callback', async function(req, res) { //this handles the response from spotify login
+  var code = req.query.code || null;
+  var state = req.query.state || null;
+  var error = req.query.error || null;
+  var storedState = req.cookies ? req.cookies["spotify_state"] : null;
+  var access_token = ''
+  console.log(error)
+  if(error != null){
+    res.redirect('http://localhost:3000/#' +
+      querystring.stringify({
+        error: 'access_denied'
+      }));
+  }
+  if (state === null || state !== storedState) {
+    res.redirect('localhost:3000/#' +
+      querystring.stringify({
+        error: 'state_mismatch'
+      }));
+  } else {
+    const params = new URLSearchParams();
+    params.append('code', code)
+    params.append('redirect_uri', redirect_uri)
+    params.append('grant_type','authorization_code')
+    var token_res = await fetch('https://accounts.spotify.com/api/token', { //get access token 
+      method: 'POST',
+      body: params,
+      headers: {
+        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')),
+      },
+    })
+    var access_json = await token_res.json()
+    access_token = access_json.access_token
+    res.setHeader('Content-Type', 'application/json');
+    res.cookie("spotify_token", access_token, {maxAge: 3600000});
+    res.redirect('http://localhost:3000/#' +
+          querystring.stringify({
+            access_token: access_token,
+            //refresh_token: refresh_token
+          }));
+  }
+});
+
+app.get('/profile', async function(req, res) {
+  var profile = await getProfile(req.header('Authorization'))
+  console.log(profile)
+  res.json(profile)
 })
 
 app.listen(port, () => {
