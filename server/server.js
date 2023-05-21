@@ -102,7 +102,7 @@ app.get('/profile', async function(req, res) {
   var profile = await getProfile(req.header('Authorization'))
   var artists = await getTopArtists(req.header('Authorization'))
   console.log(artists)
-  res.json(profile)
+  res.json([profile, artists])
 })
 
 app.listen(port, () => {
