@@ -65,18 +65,32 @@ function ResultsCard(props) {
               <Card>
                 <Card.Header> Results</Card.Header>
                 <Card.Body>
-                <p> <a href={props['profile'][0].external_urls.spotify} >{props['profile'][0].display_name}</a> | {props['profile'][0].email} | Spotify {props['profile'][0].product}</p>
-                <h2>Your Top Artists</h2>
-                <Row xs={1} md={2} className="g-4">
-                  {props['profile'][1].items.map((artist, index) => (
-                    <Card style={{ width: '18rem' }}>
-                    <Card.Img variant="top" src={artist.images[0].url} />
-                    <Card.Body>
-                      <Card.Title>{index+1}. {artist.name}</Card.Title>
-                    </Card.Body>
-                  </Card>
-                  ))} 
-                </Row>
+                  <p> <a href={props['profile'][0].external_urls.spotify} >{props['profile'][0].display_name}</a> | {props['profile'][0].email} | Spotify {props['profile'][0].product}</p>
+                  <h2>Your Top Artists</h2>
+                  <Row xs={1} md={2} className="g-4">
+                    {props['profile'][1].items.map((artist, index) => (
+                      <Card style={{ width: '18rem' }}>
+                      <Card.Img variant="top" src={artist.images[0].url} />
+                      <Card.Body>
+                        <Card.Title>{index+1}. {artist.name}</Card.Title>
+                      </Card.Body>
+                    </Card>
+                    ))} 
+                  </Row>
+                  <h2>Your Top Songs</h2>
+                  <Row xs={1} md={2} className="g-4">
+                    {props['profile'][2].items.map((song, index) => (
+                      <Card style={{ width: '18rem' }}>
+                      <Card.Img variant="top" src={song.album.images[0].url} />
+                      <Card.Body>
+                        <Card.Title>{index+1}. {song.name}</Card.Title>
+                        <Card.Text>
+                          {song.artists[0].name}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                    ))} 
+                  </Row>
               </Card.Body>
             </Card>
             </Col>

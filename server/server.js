@@ -29,6 +29,14 @@ async function getTopArtists(access_token){
   var artists_json = await artists.json()
   return artists_json
 }
+async function getTopSongs(access_token){
+  var songs = await fetch('https://api.spotify.com/v1/me/top/tracks?time_range=long_term', {
+  method: 'GET',
+  headers: { 'Authorization': 'Bearer ' + access_token },
+  })
+  var songs_json = await songs.json()
+  return songs_json
+}
 
 var generateRandomString = function(length) { //part of the Spotify API functionality
   var text = '';
@@ -101,8 +109,9 @@ app.get('/callback', async function(req, res) { //this handles the response from
 app.get('/profile', async function(req, res) {
   var profile = await getProfile(req.header('Authorization'))
   var artists = await getTopArtists(req.header('Authorization'))
+  var songs = await getTopSongs(req.header('Authorization'))
   console.log(artists)
-  res.json([profile, artists])
+  res.json([profile, artists, songs])
 })
 
 app.listen(port, () => {
