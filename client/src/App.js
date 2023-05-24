@@ -66,6 +66,12 @@ function ResultsCard(props) {
                 <Card.Header> Results</Card.Header>
                 <Card.Body>
                 <p> <a href={props['profile'][0].external_urls.spotify} >{props['profile'][0].display_name}</a> | {props['profile'][0].email} | Spotify {props['profile'][0].product}</p>
+                <h2>Your Top Artists</h2>
+                <ol>
+                  {props['profile'][1].items.map((artist, index) => (
+                    <li key={index}>{artist.name}</li>
+                  ))} 
+                </ol>
                 </Card.Body>
               </Card>
             </Col>
