@@ -36,6 +36,9 @@ function Login() { //check if logged in to Spotify - then display username if lo
 }
 function LoginCard(){
   return(
+    <Container fluid>
+    <Row>
+        <Col sm>
           <Card>
               <Card.Header> Step 1: Spotify Log In</Card.Header>
               <Card.Body>
@@ -43,12 +46,14 @@ function LoginCard(){
                   <Login />
                   <br /><br />
                   <h5><b>Permission information</b></h5>
-                  <b>View Spotify account data</b> - allows this app to access your profile in order to create a playlist.<br />
-                  <b>Create, edit and follow playlists</b> - allows this app to create your personalized playlist and save it to your profile.        
-                  <p>Permission can be revoked <a href='https://www.spotify.com/uk/account/apps/'> here</a> by clicking "Remove Access" for "Route Playlist Generator".</p>  
+                  <b>View Spotify account data</b> - allows this app to access your profile.<br />
+                  <p>Permission can be revoked <a href='https://www.spotify.com/uk/account/apps/'> here</a> by clicking "Remove Access" for "Profile Viewer".</p>  
                 </Card.Text>
               </Card.Body>
             </Card>
+        </Col>
+    </Row>
+    </Container>
   )
 }
 
@@ -60,7 +65,7 @@ function ResultsCard(props) {
               <Card>
                 <Card.Header> Results</Card.Header>
                 <Card.Body>
-
+                <p> <a href={props['profile'][0].external_urls.spotify} >{props['profile'][0].display_name}</a> | {props['profile'][0].email} | Spotify {props['profile'][0].product}</p>
                 </Card.Body>
               </Card>
             </Col>
@@ -71,11 +76,13 @@ function ResultsCard(props) {
 
 
 function App() {
+  const [showResult, setShowResult] = useState(false)
+  const [profileData, setProfileData]  = useState([])
   var loggedInCookie = document.cookie
   .split("; ")
   .find((row) => row.startsWith("spotify_token="))
   ?.split("=")[1]; 
-  const generate = () => { //to be called by the submit button on location modal
+  const generate = () => {
     fetch("/profile", {
       method: 'GET',
       headers: {
@@ -85,14 +92,18 @@ function App() {
       },
     })
     .then(response => response.json())
-    .then( json => console.log(json)) //set locationsResponse as the api returned data
+    .then( json => setProfileData(json))
+    .then(() => setShowResult(true))
   }
   return (
     <div className="App">
       <MainNav />
       <body>
+        <Container fluid>
         <LoginCard />
         <button id='testBtn' onClick={generate}>Click</button>
+        {showResult && <ResultsCard  profile = {profileData}/>}
+        </Container>
       </body>
     </div>
   );
