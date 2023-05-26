@@ -126,7 +126,8 @@ function App() {
       <body>
         <Container fluid>
         <LoginCard />
-        <button id='testBtn' onClick={generate}>Click</button>
+        {loggedInCookie && <button id='testBtn' onClick={generate}>Click</button>}
+        
         {showResult && <ResultsCard  profile = {profileData}/>}
         </Container>
       </body>
