@@ -77,13 +77,15 @@ function ResultsCard(props) {
                     ))} 
                   </Row>
                   <h3>Your Top Songs</h3>
-                  <Table>
+                  <Table striped bordered hover>
                     <thead>
                       <tr>
                         <th>Position</th>
-                        <th>Image</th>
+                        <th>Song Name</th>
                         <th>Artist</th>
                       </tr>
+                    </thead>
+                    <tbody>
                       {props['profile'][2].items.map((song, index) => (
                         <tr>
                           <td>{index+1}</td>
@@ -91,7 +93,7 @@ function ResultsCard(props) {
                           <td>{song.artists[0].name}</td>
                         </tr>
                       ))}
-                    </thead>
+                    </tbody>
                   </Table>
                   {/* <Row xs={1} md={5} className="g-4">
                     {props['profile'][2].items.map((song, index) => (
