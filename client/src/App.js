@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Table from 'react-bootstrap/Table';
 
 function MainNav(){
   return(
@@ -36,7 +37,6 @@ function Login() { //check if logged in to Spotify - then display username if lo
 }
 function LoginCard(){
   return(
-    <Container fluid>
     <Row>
         <Col sm>
           <Card>
@@ -52,13 +52,11 @@ function LoginCard(){
             </Card>
         </Col>
     </Row>
-    </Container>
   )
 }
 
 function ResultsCard(props) {
     return(
-      <Container fluid>
           <Row>
             <Col sm>
               <Card>
@@ -66,35 +64,54 @@ function ResultsCard(props) {
                 <Card.Body>
                   <p> <a href={props['profile'][0].external_urls.spotify} >{props['profile'][0].display_name}</a> | {props['profile'][0].email} | Spotify {props['profile'][0].product}</p>
                   <h3>Your Top Artists</h3>
-                  <Row xs={1} md={2} className="g-4">
+                  <Row xs={1} sm={3} md={5} className="g-4">
                     {props['profile'][1].items.map((artist, index) => (
-                      <Card style={{ width: '18rem' }}>
-                      <Card.Img variant="top" src={artist.images[0].url} />
-                      <Card.Body>
-                        <Card.Title>{index+1}. {artist.name}</Card.Title>
-                      </Card.Body>
-                    </Card>
+                      <Col>
+                        <Card style={{ width: '14rem' }}>
+                          <Card.Img variant="top" src={artist.images[0].url} />
+                          <Card.Body>
+                            <Card.Title>{index+1}. {artist.name}</Card.Title>
+                          </Card.Body>
+                        </Card>
+                      </Col>
                     ))} 
                   </Row>
                   <h3>Your Top Songs</h3>
-                  <Row xs={1} md={2} className="g-4">
+                  <Table>
+                    <thead>
+                      <tr>
+                        <th>Position</th>
+                        <th>Image</th>
+                        <th>Artist</th>
+                      </tr>
+                      {props['profile'][2].items.map((song, index) => (
+                        <tr>
+                          <td>{index+1}</td>
+                          <td>{song.name}</td>
+                          <td>{song.artists[0].name}</td>
+                        </tr>
+                      ))}
+                    </thead>
+                  </Table>
+                  {/* <Row xs={1} md={5} className="g-4">
                     {props['profile'][2].items.map((song, index) => (
-                      <Card style={{ width: '18rem' }}>
-                      <Card.Img variant="top" src={song.album.images[0].url} />
-                      <Card.Body>
-                        <Card.Title>{index+1}. {song.name}</Card.Title>
-                        <Card.Text>
-                          {song.artists[0].name}
-                        </Card.Text>
-                      </Card.Body>
-                    </Card>
-                    ))} 
-                  </Row>
+                      <Col>
+                        <Card style={{ width: '12rem' }}>
+                          <Card.Img variant="top" src={song.album.images[0].url} />
+                          <Card.Body>
+                            <Card.Title>{index+1}. {song.name}</Card.Title>
+                            <Card.Text>
+                              {song.artists[0].name}
+                            </Card.Text>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    ))}  
+                  </Row>*/}
               </Card.Body>
             </Card>
             </Col>
-            </Row>
-        </Container>
+          </Row>
     );
 }
 
@@ -125,7 +142,7 @@ function App() {
       <body>
         <Container fluid>
         <LoginCard />
-        {loggedInCookie && <button id='testBtn' onClick={generate}>Click to get your top artists and songs</button>}
+        {showResult === false && <button id='testBtn' onClick={generate}>Click to get your top artists and songs</button>}
         {showResult && <ResultsCard  profile = {profileData}/>}
         </Container>
       </body>

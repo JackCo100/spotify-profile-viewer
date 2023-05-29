@@ -110,7 +110,7 @@ app.get('/profile', async function(req, res) {
   var profile = await getProfile(req.header('Authorization'))
   var artists = await getTopArtists(req.header('Authorization'))
   var songs = await getTopSongs(req.header('Authorization'))
-  console.log(artists)
+  console.log(songs)
   res.json([profile, artists, songs])
 })
 
