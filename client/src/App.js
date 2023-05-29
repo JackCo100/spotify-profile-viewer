@@ -44,8 +44,7 @@ function LoginCard(){
               <Card.Body>
                 <Card.Text>
                   <Login />
-                  <br /><br />
-                  <h5><b>Permission information</b></h5>
+                  <h2 id='permissions'>Permission information</h2>
                   <b>View Spotify account data</b> - allows this app to access your profile.<br />
                   <p>Permission can be revoked <a href='https://www.spotify.com/uk/account/apps/'> here</a> by clicking "Remove Access" for "Profile Viewer".</p>  
                 </Card.Text>
@@ -66,7 +65,7 @@ function ResultsCard(props) {
                 <Card.Header> Results</Card.Header>
                 <Card.Body>
                   <p> <a href={props['profile'][0].external_urls.spotify} >{props['profile'][0].display_name}</a> | {props['profile'][0].email} | Spotify {props['profile'][0].product}</p>
-                  <h2>Your Top Artists</h2>
+                  <h3>Your Top Artists</h3>
                   <Row xs={1} md={2} className="g-4">
                     {props['profile'][1].items.map((artist, index) => (
                       <Card style={{ width: '18rem' }}>
@@ -77,7 +76,7 @@ function ResultsCard(props) {
                     </Card>
                     ))} 
                   </Row>
-                  <h2>Your Top Songs</h2>
+                  <h3>Your Top Songs</h3>
                   <Row xs={1} md={2} className="g-4">
                     {props['profile'][2].items.map((song, index) => (
                       <Card style={{ width: '18rem' }}>
@@ -126,8 +125,7 @@ function App() {
       <body>
         <Container fluid>
         <LoginCard />
-        {loggedInCookie && <button id='testBtn' onClick={generate}>Click</button>}
-        
+        {loggedInCookie && <button id='testBtn' onClick={generate}>Click to get your top artists and songs</button>}
         {showResult && <ResultsCard  profile = {profileData}/>}
         </Container>
       </body>

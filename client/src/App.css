@@ -21,3 +21,9 @@
 .App-link {
   color: #61dafb;
 }
+
+#permissions{
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+}
