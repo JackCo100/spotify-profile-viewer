@@ -37,7 +37,7 @@ function Login() { //check if logged in to Spotify - then display username if lo
 }
 function LoginCard(){
   return(
-    <Row>
+    <Row class="my-3">
         <Col sm>
           <Card>
               <Card.Header> Step 1: Spotify Log In</Card.Header>
@@ -57,7 +57,7 @@ function LoginCard(){
 
 function ResultsCard(props) {
     return(
-          <Row>
+          <Row className='mb-3'>
             <Col sm>
               <Card>
                 <Card.Header> Results</Card.Header>
@@ -95,21 +95,6 @@ function ResultsCard(props) {
                       ))}
                     </tbody>
                   </Table>
-                  {/* <Row xs={1} md={5} className="g-4">
-                    {props['profile'][2].items.map((song, index) => (
-                      <Col>
-                        <Card style={{ width: '12rem' }}>
-                          <Card.Img variant="top" src={song.album.images[0].url} />
-                          <Card.Body>
-                            <Card.Title>{index+1}. {song.name}</Card.Title>
-                            <Card.Text>
-                              {song.artists[0].name}
-                            </Card.Text>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    ))}  
-                  </Row>*/}
               </Card.Body>
             </Card>
             </Col>
@@ -143,9 +128,9 @@ function App() {
       <MainNav />
       <body>
         <Container fluid>
-        <LoginCard />
-        {showResult === false && <button id='testBtn' onClick={generate}>Click to get your top artists and songs</button>}
-        {showResult && <ResultsCard  profile = {profileData}/>}
+          <LoginCard />
+          {showResult === false && <button id='testBtn' onClick={generate}>Click to get your top artists and songs</button>}
+          {showResult && <ResultsCard  profile = {profileData}/>}
         </Container>
       </body>
     </div>
