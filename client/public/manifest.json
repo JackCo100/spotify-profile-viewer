@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Spotify Profile Viewer",
+  "name": "Spotify Profile & top items viewer",
   "icons": [
     {
       "src": "",
